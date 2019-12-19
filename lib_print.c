@@ -31,7 +31,7 @@ static char *print_num(char *buf, char *end, int val, unsigned int base, unsigne
 
     do {
         dig = val % base;
-        tmp[i++] = ((dig < 10) ? dig + '0' : dig - 10 + ((flag&UPPER)?'A':'a'));
+        tmp[i++] = ((dig < 10) ? dig + '0' : dig - 10 + ((flag & UPPER) ? 'A' : 'a'));
         val /= base;
     } while (val > 0);
 
@@ -60,8 +60,7 @@ int print_vsnprintf(char *buf, unsigned int num, const char *fmt, va_list arg)
     const char *str;
     unsigned int flag = 0;
 
-    for (; *fmt; ++fmt)
-    {
+    for (; *fmt; ++fmt) {
         if (*fmt != '%') {
             if (ptr < end) {
                 *(ptr++) = *fmt;

@@ -8,15 +8,13 @@
 #include "lib_print.h"
 
 
-#define ZERO        (1 << 0)    /* pad with zero */
-#define SIGN        (1 << 1)    /* unsigned/signed */
-#define PLUS        (1 << 2)    /* show plus */
-#define SPACE       (1 << 3)    /* space if plus */
-#define LEFT        (1 << 4)    /* left justified */
-#define UPPER       (1 << 5)    /* use 'ABCDEF' instead of 'abcdef' */
+#define ZERO        (1 << 0)    /* zero front space for dec or hex */
+#define SIGN        (1 << 1)    /* signed type for dec */
+#define UPPER       (1 << 2)    /* upper case for hex */
 
 
-static char *print_num(char *buf, char *end, int val, unsigned int base, unsigned int flag)
+static char *print_num(char *buf, char *end, int val, unsigned int base,
+                       unsigned int flag, unsigned int width)
 {
     char *ptr = buf;
     char tmp[16];
@@ -34,6 +32,15 @@ static char *print_num(char *buf, char *end, int val, unsigned int base, unsigne
         tmp[i++] = ((dig < 10) ? dig + '0' : dig - 10 + ((flag & UPPER) ? 'A' : 'a'));
         val /= base;
     } while (val > 0);
+
+
+    while ((width--) > (neg + i)) {
+        if (ptr < end) {
+            *(ptr++) = (flag & ZERO) ? '0' : ' ';
+            continue;
+        }
+        break;
+    }
 
     if (neg) {
         if (ptr < end) {
@@ -53,12 +60,14 @@ static char *print_num(char *buf, char *end, int val, unsigned int base, unsigne
 }
 
 
+
 int print_vsnprintf(char *buf, unsigned int num, const char *fmt, va_list arg)
 {
     char *ptr = buf;
     char *end = buf + num;
     const char *str;
     unsigned int flag = 0;
+    unsigned int width = 0;
 
     for (; *fmt; ++fmt) {
         if (*fmt != '%') {
@@ -69,8 +78,23 @@ int print_vsnprintf(char *buf, unsigned int num, const char *fmt, va_list arg)
             break;
         }
 
+
         flag = 0;
-        fmt++;
+        while (1) {
+            ++fmt; /* skip the first '%' character */
+            if (*fmt == '0') {
+                flag |= ZERO;
+            } else {
+                break;
+            }
+        }
+
+        /* get field width */
+        width = 0;
+        while ((*fmt >= '0') && (*fmt <= '9')) {
+            width = width * 10 + (*(fmt++) - '0');
+        }
+
         switch (*fmt) {
         case 'c':
             if (ptr < end) {
@@ -90,12 +114,12 @@ int print_vsnprintf(char *buf, unsigned int num, const char *fmt, va_list arg)
         case 'd': /* signed dec */
             flag |= SIGN;
         case 'u': /* unsigned dec */
-            ptr = print_num(ptr, end, va_arg(arg, int), 10, flag);
+            ptr = print_num(ptr, end, va_arg(arg, int), 10, flag, width);
             break;
         case 'X': /* unsigned upper hex */
             flag |= UPPER;
         case 'x': /* unsigned lower hex */
-            ptr = print_num(ptr, end, va_arg(arg, int), 16, flag);
+            ptr = print_num(ptr, end, va_arg(arg, int), 16, flag, width);
             break;
         default:
             if (ptr < end) {

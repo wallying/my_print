@@ -21,7 +21,7 @@ lib_print support format:
     %X      - print unsigned upper hex integer
 *******************************************************************************/
 
-char buf[50] = "123456789ABCDEFG";
+char buf[100] = "123456789ABCDEFG";
 
 
 
@@ -29,35 +29,50 @@ int main(int argc, char *argv[])
 {
     printf("hello lib_print!\n\n");
 
-    printf("char=%c,%c\n", 'A', 65);
-    print_snprintf(buf, sizeof(buf), "char=%c,%c", 'A', 65);
+    /*========================================================================*/
+    printf("char=%c,%c,%%,%c\n", 'A', 97, '%');
+    print_snprintf(buf, sizeof(buf), "char=%c,%c,%%,%c", 'A', 97, '%');
     puts(buf);
     putchar('\n');
 
-
-    printf("per=%%,%c,%c\n", '%', 37);
-    print_snprintf(buf, sizeof(buf), "per=%%,%c,%c", '%', 37);
+    /*========================================================================*/
+    printf("str=\"%s\"\n", "hello, myPrint!");
+    print_snprintf(buf, sizeof(buf), "str=\"%s\"", "hello, myPrint!");
     puts(buf);
     putchar('\n');
 
-
-    printf("str=%s%s%s\n", "hello", " ", "myPrint");
-    print_snprintf(buf, sizeof(buf), "str=%s%s%s", "hello", " ", "myPrint");
-    puts(buf);
-    putchar('\n');
-
-
+    /*========================================================================*/
     printf("dec=%d,%u,%d,%u\n", 123, 123, -123, -123);
     print_snprintf(buf, sizeof(buf), "dec=%d,%u,%d,%u", 123, 123, -123, -123);
     puts(buf);
     putchar('\n');
 
-
-    printf("hex=%x,%X,%x,%X\n", 58, 58, -58, -58);
-    print_snprintf(buf, sizeof(buf), "hex=%x,%X,%x,%X\n", 58, 58, -58, -58);
+    printf("dec=%12d,%12u,%12d,%12u\n", 123, 123, -123, -123);
+    print_snprintf(buf, sizeof(buf), "dec=%12d,%12u,%12d,%12u", 123, 123, -123, -123);
     puts(buf);
     putchar('\n');
 
+    printf("dec=%012d,%012u,%012d,%012u\n", 123, 123, -123, -123);
+    print_snprintf(buf, sizeof(buf), "dec=%012d,%012u,%012d,%012u", 123, 123, -123, -123);
+    puts(buf);
+    putchar('\n');
+
+    /*========================================================================*/
+    printf("hex=%x,%X,%x,%X\n", 123, 123, -123, -123);
+    print_snprintf(buf, sizeof(buf), "hex=%x,%X,%x,%X", 123, 123, -123, -123);
+    puts(buf);
+    putchar('\n');
+
+    printf("hex=%10x,%10X,%10x,%10X\n", 123, 123, -123, -123);
+    print_snprintf(buf, sizeof(buf), "hex=%10x,%10X,%10x,%10X", 123, 123, -123, -123);
+    puts(buf);
+    putchar('\n');
+
+    printf("hex=%010x,%010X,%010x,%010X\n", 123, 123, -123, -123);
+    print_snprintf(buf, sizeof(buf), "hex=%010x,%010X,%010x,%010X", 123, 123, -123, -123);
+    puts(buf);
+    putchar('\n');
+    /*========================================================================*/
 
     return 0;
 }

@@ -35,16 +35,18 @@ int main(int argc, char *argv[])
 
     /*========================================================================*/
 #if 1
-    printf("char=%c,%c,%%,%c\n", 'A', 97, '%');
-    print_sprintf(buf, "char=%c,%c,%%,%c", 'A', 97, '%');
-    puts(buf);
+    snprintf(buf1, sizeof(buf1), "char=%c,%3c,%-5c,%12c,%%\n", 'A', 97, 'X', '%');
+    print_snprintf(buf2, sizeof(buf2), "char=%c,%3c,%-5c,%12c,%%\n", 'A', 97, 'X', '%');
+    printf("%s", buf1);
+    printf("%s", buf2);
     putchar('\n');
 #endif
     /*========================================================================*/
 #if 1
-    printf("str=\"%30s\"\n", "hello, myPrint!");
-    print_sprintf(buf, "str=\"%30s\"", "hello, myPrint!");
-    puts(buf);
+    snprintf(buf1, sizeof(buf1), "str=\"%30s\"\n", "hello, myPrint!");
+    print_snprintf(buf2, sizeof(buf2), "str=\"%30s\"\n", "hello, myPrint!");
+    printf("%s", buf1);
+    printf("%s", buf2);
     putchar('\n');
 #endif
     /*========================================================================*/

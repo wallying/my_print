@@ -14,6 +14,15 @@
 #define LEFT        (1 << 3)    /* left justified */
 
 
+static char *put_char(char *buf, char *end, char val, int *width)
+{
+    char *ptr = buf;
+    while ((*width > 0) && (ptr < end)) {
+        *(ptr++) = val;
+        --*width;
+    }
+    return ptr;
+}
 
 static char *print_char(char *buf, char *end, int val, int flag, int width)
 {
@@ -23,29 +32,19 @@ static char *print_char(char *buf, char *end, int val, int flag, int width)
     tmp = (char)val;
 
     --width;
+
     /* space character */
     if (!(flag & LEFT)) {
-        while (width > 0) {
-            if (ptr < end) {
-                *(ptr++) = ' ';
-                --width;
-                continue;
-            }
-            break;
-        }
+        ptr = put_char(ptr, end, ' ', &width);
     }
+
+    /* char character */
     if (ptr < end) {
         *(ptr++) = tmp;
     }
+
     /* space character */
-    while (width > 0) {
-        if (ptr < end) {
-            *(ptr++) = ' ';
-            --width;
-            continue;
-        }
-        break;
-    }
+    ptr = put_char(ptr, end, ' ', &width);
 
     return ptr;
 }
@@ -74,14 +73,7 @@ static char *print_num(char *buf, char *end, int val, unsigned int base, int fla
 
     /* space character */
     if (!(flag & (ZERO | LEFT))) {
-        while (width > 0) {
-            if (ptr < end) {
-                *(ptr++) = ' ';
-                --width;
-                continue;
-            }
-            break;
-        }
+        ptr = put_char(ptr, end, ' ', &width);
     }
 
     /* minus character */
@@ -93,14 +85,7 @@ static char *print_num(char *buf, char *end, int val, unsigned int base, int fla
 
     /* zero pad character */
     if (!(flag & LEFT)) {
-        while (width > 0) {
-            if (ptr < end) {
-                *(ptr++) = '0';
-                --width;
-                continue;
-            }
-            break;
-        }
+        ptr = put_char(ptr, end, '0', &width);
     }
 
     /* number character */
@@ -113,14 +98,7 @@ static char *print_num(char *buf, char *end, int val, unsigned int base, int fla
     }
 
     /* space character */
-    while (width > 0) {
-        if (ptr < end) {
-            *(ptr++) = ' ';
-            --width;
-            continue;
-        }
-        break;
-    }
+    ptr = put_char(ptr, end, ' ', &width);
 
     return ptr;
 }

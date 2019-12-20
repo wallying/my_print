@@ -69,6 +69,12 @@ int print_vsnprintf(char *buf, unsigned int num, const char *fmt, va_list arg)
     unsigned int flag = 0;
     unsigned int width = 0;
 
+    /* make sure end is always >= ptr */
+    if (end < ptr) {
+        end  = ((char *)-1);
+        num = end - ptr;
+    }
+
     for (; *fmt; ++fmt) {
         if (*fmt != '%') {
             if (ptr < end) {
@@ -78,7 +84,7 @@ int print_vsnprintf(char *buf, unsigned int num, const char *fmt, va_list arg)
             break;
         }
 
-
+        /* process flag */
         flag = 0;
         while (1) {
             ++fmt; /* skip the first '%' character */

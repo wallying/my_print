@@ -8,13 +8,49 @@
 #include "lib_print.h"
 
 
-#define ZERO        (1 << 0)    /* zero front space for dec or hex */
-#define SIGN        (1 << 1)    /* signed type for dec */
-#define UPPER       (1 << 2)    /* upper case for hex */
+#define SIGN        (1 << 0)    /* signed type for decimal */
+#define ZERO        (1 << 1)    /* zero front for decimal or hexadecimal */
+#define UPPER       (1 << 2)    /* upper case for hexadecimal */
+#define LEFT        (1 << 3)    /* left justified */
 
 
-static char *print_num(char *buf, char *end, int val, unsigned int base,
-                       unsigned int flag, unsigned int width)
+
+static char *print_char(char *buf, char *end, int val, int flag, int width)
+{
+    char *ptr = buf;
+    char tmp = 0;
+
+    tmp = (char)val;
+
+    --width;
+    /* space character */
+    if (!(flag & LEFT)) {
+        while (width > 0) {
+            if (ptr < end) {
+                *(ptr++) = ' ';
+                --width;
+                continue;
+            }
+            break;
+        }
+    }
+    if (ptr < end) {
+        *(ptr++) = tmp;
+    }
+    /* space character */
+    while (width > 0) {
+        if (ptr < end) {
+            *(ptr++) = ' ';
+            --width;
+            continue;
+        }
+        break;
+    }
+
+    return ptr;
+}
+
+static char *print_num(char *buf, char *end, int val, unsigned int base, int flag, int width)
 {
     char *ptr = buf;
     char tmp[16];
@@ -27,30 +63,60 @@ static char *print_num(char *buf, char *end, int val, unsigned int base,
         val = -val;
     }
 
+    i = 0;
     do {
         dig = val % base;
         tmp[i++] = ((dig < 10) ? dig + '0' : dig - 10 + ((flag & UPPER) ? 'A' : 'a'));
         val /= base;
     } while (val > 0);
 
+    width -= (i + neg);
 
-    while ((width--) > (neg + i)) {
-        if (ptr < end) {
-            *(ptr++) = (flag & ZERO) ? '0' : ' ';
-            continue;
+    /* space character */
+    if (!(flag & (ZERO | LEFT))) {
+        while (width > 0) {
+            if (ptr < end) {
+                *(ptr++) = ' ';
+                --width;
+                continue;
+            }
+            break;
         }
-        break;
     }
 
+    /* minus character */
     if (neg) {
         if (ptr < end) {
             *(ptr++) = '-';
         }
     }
 
+    /* zero pad character */
+    if (!(flag & LEFT)) {
+        while (width > 0) {
+            if (ptr < end) {
+                *(ptr++) = '0';
+                --width;
+                continue;
+            }
+            break;
+        }
+    }
+
+    /* number character */
     while (i--) {
         if (ptr < end) {
             *(ptr++) = tmp[i];
+            continue;
+        }
+        break;
+    }
+
+    /* space character */
+    while (width > 0) {
+        if (ptr < end) {
+            *(ptr++) = ' ';
+            --width;
             continue;
         }
         break;
@@ -66,8 +132,8 @@ int print_vsnprintf(char *buf, unsigned int num, const char *fmt, va_list arg)
     char *ptr = buf;
     char *end = buf + num;
     const char *str;
-    unsigned int flag = 0;
-    unsigned int width = 0;
+    int flag = 0;
+    int width = 0;
 
     /* make sure end is always >= ptr */
     if (end < ptr) {
@@ -90,6 +156,8 @@ int print_vsnprintf(char *buf, unsigned int num, const char *fmt, va_list arg)
             ++fmt; /* skip the first '%' character */
             if (*fmt == '0') {
                 flag |= ZERO;
+            } else if (*fmt == '-') {
+                flag |= LEFT;
             } else {
                 break;
             }
@@ -103,9 +171,7 @@ int print_vsnprintf(char *buf, unsigned int num, const char *fmt, va_list arg)
 
         switch (*fmt) {
         case 'c':
-            if (ptr < end) {
-                *(ptr++) = (char)(va_arg(arg, int));
-            }
+            ptr = print_char(ptr, end, va_arg(arg, int), flag, width);
             break;
         case 's':
             str = va_arg(arg, char *);

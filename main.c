@@ -23,7 +23,6 @@ lib_print
 *******************************************************************************/
 #define BUF_LEN (100)
 
-char buf[BUF_LEN] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 char buf1[BUF_LEN] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 char buf2[BUF_LEN] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -35,7 +34,7 @@ int main(int argc, char *argv[])
 
     /*========================================================================*/
 #if 1
-    snprintf(buf1, sizeof(buf1), "char=%c,%3c,%-5c,%12c,%%\n", 'A', 97, 'X', '%');
+          snprintf(buf1, sizeof(buf1), "char=%c,%3c,%-5c,%12c,%%\n", 'A', 97, 'X', '%');
     print_snprintf(buf2, sizeof(buf2), "char=%c,%3c,%-5c,%12c,%%\n", 'A', 97, 'X', '%');
     printf("%s", buf1);
     printf("%s", buf2);
@@ -43,54 +42,62 @@ int main(int argc, char *argv[])
 #endif
     /*========================================================================*/
 #if 1
-    snprintf(buf1, sizeof(buf1), "str=\"%30s\"\n", "hello, myPrint!");
-    print_snprintf(buf2, sizeof(buf2), "str=\"%30s\"\n", "hello, myPrint!");
+          snprintf(buf1, sizeof(buf1), "str=%s,%5s,%-5s,%-s\n", "aaa", "bbb", "ccc", "ddd");
+    print_snprintf(buf2, sizeof(buf2), "str=%s,%5s,%-5s,%-s\n", "aaa", "bbb", "ccc", "ddd");
     printf("%s", buf1);
     printf("%s", buf2);
     putchar('\n');
 #endif
     /*========================================================================*/
 #if 1
-    printf("dec=%d,%u,%d,%u\n", 123, 123, -123, -123);
-    print_sprintf(buf, "dec=%d,%u,%d,%u", 123, 123, -123, -123);
-    puts(buf);
+          snprintf(buf1, sizeof(buf1), "dec=%d,%u,%d,%u\n", 123, 123, -123, -123);
+    print_snprintf(buf2, sizeof(buf2), "dec=%d,%u,%d,%u\n", 123, 123, -123, -123);
+    printf("%s", buf1);
+    printf("%s", buf2);
     putchar('\n');
 
-    printf("dec=%12d,%12u,%12d,%12u\n", 123, 123, -123, -123);
-    print_sprintf(buf, "dec=%12d,%12u,%12d,%12u", 123, 123, -123, -123);
-    puts(buf);
+          snprintf(buf1, sizeof(buf1), "dec=%12d,%12u,%12d,%12u\n", 123, 123, -123, -123);
+    print_snprintf(buf2, sizeof(buf2), "dec=%12d,%12u,%12d,%12u\n", 123, 123, -123, -123);
+    printf("%s", buf1);
+    printf("%s", buf2);
     putchar('\n');
 
-    printf("dec=%012d,%012u,%012d,%012u\n", 123, 123, -123, -123);
-    print_sprintf(buf, "dec=%012d,%012u,%012d,%012u", 123, 123, -123, -123);
-    puts(buf);
+          snprintf(buf1, sizeof(buf1), "dec=%012d,%012u,%012d,%012u\n", 123, 123, -123, -123);
+    print_snprintf(buf2, sizeof(buf2), "dec=%012d,%012u,%012d,%012u\n", 123, 123, -123, -123);
+    printf("%s", buf1);
+    printf("%s", buf2);
     putchar('\n');
 
-    printf("dec=%-12d,%-12u,%-12d,%-12u\n", 123, 123, -123, -123);
-    print_sprintf(buf, "dec=%-12d,%-12u,%-12d,%-12u", 123, 123, -123, -123);
-    puts(buf);
+          snprintf(buf1, sizeof(buf1), "dec=%-12d,%-12u,%-12d,%-12u\n", 123, 123, -123, -123);
+    print_snprintf(buf2, sizeof(buf2), "dec=%-12d,%-12u,%-12d,%-12u\n", 123, 123, -123, -123);
+    printf("%s", buf1);
+    printf("%s", buf2);
     putchar('\n');
 
-    printf("dec=%3d,%03d,%4d,%04d,%5d,%05d\n", -123, -123, -123, -123, -123, -123);
-    print_sprintf(buf, "dec=%3d,%03d,%4d,%04d,%5d,%05d", -123, -123, -123, -123, -123, -123);
-    puts(buf);
+          snprintf(buf1, sizeof(buf1), "dec=%3d,%03d,%4d,%04d,%5d,%05d\n", -123, -123, -123, -123, -123, -123);
+    print_snprintf(buf2, sizeof(buf2), "dec=%3d,%03d,%4d,%04d,%5d,%05d\n", -123, -123, -123, -123, -123, -123);
+    printf("%s", buf1);
+    printf("%s", buf2);
     putchar('\n');
 #endif
     /*========================================================================*/
 #if 1
-    printf("hex=%x,%X,%x,%X\n", 123, 123, -123, -123);
-    print_sprintf(buf, "hex=%x,%X,%x,%X", 123, 123, -123, -123);
-    puts(buf);
+          snprintf(buf1, sizeof(buf1), "hex=%x,%X,%x,%X\n", 123, 123, -123, -123);
+    print_snprintf(buf2, sizeof(buf2), "hex=%x,%X,%x,%X\n", 123, 123, -123, -123);
+    printf("%s", buf1);
+    printf("%s", buf2);
     putchar('\n');
 
-    printf("hex=%10x,%10X,%10x,%10X\n", 123, 123, -123, -123);
-    print_sprintf(buf, "hex=%10x,%10X,%10x,%10X", 123, 123, -123, -123);
-    puts(buf);
+          snprintf(buf1, sizeof(buf1), "hex=%10x,%10X,%10x,%10X\n", 123, 123, -123, -123);
+    print_snprintf(buf2, sizeof(buf2), "hex=%10x,%10X,%10x,%10X\n", 123, 123, -123, -123);
+    printf("%s", buf1);
+    printf("%s", buf2);
     putchar('\n');
 
-    printf("hex=%010x,%010X,%010x,%010X\n", 123, 123, -123, -123);
-    print_sprintf(buf, "hex=%010x,%010X,%010x,%010X", 123, 123, -123, -123);
-    puts(buf);
+          snprintf(buf1, sizeof(buf1), "hex=%010x,%010X,%010x,%010X\n", 123, 123, -123, -123);
+    print_snprintf(buf2, sizeof(buf2), "hex=%010x,%010X,%010x,%010X\n", 123, 123, -123, -123);
+    printf("%s", buf1);
+    printf("%s", buf2);
     putchar('\n');
 #endif
     /*========================================================================*/
@@ -114,10 +121,10 @@ int main(int argc, char *argv[])
 //    #define FORMAT          "dec=%4d,%4u\n"
 //    #define FORMAT          "dec=%5d,%5u\n"
 //    #define FORMAT          "dec=%6d,%6u\n"
-    #define FORMAT          "dec=%7d,%7u\n"
+#define FORMAT          "dec=%7d,%7u\n"
 
 //    #define ARGUMENT        1234, 1234
-    #define ARGUMENT        -1234, -1234
+#define ARGUMENT        -1234, -1234
 
 
     snprintf(buf1, BUF_LEN, FORMAT, ARGUMENT);
@@ -127,7 +134,7 @@ int main(int argc, char *argv[])
     if (memcmp(buf1, buf2, BUF_LEN) == 0) {
         printf(" --> Identical!!!\n");
     } else {
-        for (int i=0; i<BUF_LEN; ++i) {
+        for (int i = 0; i < BUF_LEN; ++i) {
             printf("0x%X 0x%X", buf1[i], buf2[i]);
             if (buf1[i] != buf2[i]) {
                 printf(" --> different!!!");

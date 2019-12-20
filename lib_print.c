@@ -14,6 +14,14 @@
 #define LEFT        (1 << 3)    /* left justified */
 
 
+//static unsigned int str_len(const char *str)
+//{
+//    const char *ptr = str;
+//    for (; *ptr != '\0'; ++ptr);
+//    return ptr - str;
+//}
+
+
 static char *put_char(char *buf, char *end, char val, int *width)
 {
     char *ptr = buf;

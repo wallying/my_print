@@ -65,8 +65,8 @@ int main(int argc, char *argv[])
 #endif
     /*========================================================================*/
 #if 1
-          snprintf(buf1, sizeof(buf1), "str=%s,%5s,%-5s,%-s\n", "aaa", "bbb", "ccc", "ddd");
-    print_snprintf(buf2, sizeof(buf2), "str=%s,%5s,%-5s,%-s\n", "aaa", "bbb", "ccc", "ddd");
+          snprintf(buf1, sizeof(buf1), "str=%s,%5s,%-5s,%-2s\n", "aaa", "bbb", "ccc", "dddd");
+    print_snprintf(buf2, sizeof(buf2), "str=%s,%5s,%-5s,%-2s\n", "aaa", "bbb", "ccc", "dddd");
     buf_print_cmp();
 #endif
     /*========================================================================*/

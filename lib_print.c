@@ -1,7 +1,7 @@
 /**
  * file:    lib_print.c
  * author:  wallying@foxmail.com
- * date:    2019-12-19
+ * date:    2019-12-24
  **/
 
 
@@ -14,30 +14,19 @@
 #define LEFT        (1 << 3)    /* left justified */
 
 
-//static unsigned int str_len(const char *str)
-//{
-//    const char *ptr = str;
-//    for (; *ptr != '\0'; ++ptr);
-//    return ptr - str;
-//}
-
-
-static char *put_char(char *buf, char *end, char val, int *width)
+static char *put_char(char *buf, char *end, char ch, int *width)
 {
     char *ptr = buf;
     while ((*width > 0) && (ptr < end)) {
-        *(ptr++) = val;
+        *(ptr++) = ch;
         --*width;
     }
     return ptr;
 }
 
-static char *print_char(char *buf, char *end, int val, int flag, int width)
+static char *print_char(char *buf, char *end, char ch, int flag, int width)
 {
     char *ptr = buf;
-    char tmp = 0;
-
-    tmp = (char)val;
 
     --width;
 
@@ -48,7 +37,36 @@ static char *print_char(char *buf, char *end, int val, int flag, int width)
 
     /* char character */
     if (ptr < end) {
-        *(ptr++) = tmp;
+        *(ptr++) = ch;
+    }
+
+    /* space character */
+    ptr = put_char(ptr, end, ' ', &width);
+
+    return ptr;
+}
+
+static char *print_str(char *buf, char *end, char *str, int flag, int width)
+{
+    char *ptr = buf;
+    int i = 0;
+
+    for (i = 0; str[i] != '\0'; ++i);
+
+    width -= i;
+
+    /* space character */
+    if (!(flag & LEFT)) {
+        ptr = put_char(ptr, end, ' ', &width);
+    }
+
+    /* string character */
+    while (i--) {
+        if (ptr < end) {
+            *(ptr++) = str[i];
+            continue;
+        }
+        break;
     }
 
     /* space character */
@@ -117,13 +135,12 @@ int print_vsnprintf(char *buf, unsigned int num, const char *fmt, va_list arg)
 {
     char *ptr = buf;
     char *end = buf + num;
-    const char *str;
     int flag = 0;
     int width = 0;
 
     /* make sure end is always >= ptr */
     if (end < ptr) {
-        end  = ((char *)-1);
+        end  = ((char *) - 1);
         num = end - ptr;
     }
 
@@ -160,14 +177,7 @@ int print_vsnprintf(char *buf, unsigned int num, const char *fmt, va_list arg)
             ptr = print_char(ptr, end, va_arg(arg, int), flag, width);
             break;
         case 's':
-            str = va_arg(arg, char *);
-            for (; *str != '\0'; ++str) {
-                if (ptr < end) {
-                    *(ptr++) = *str;
-                    continue;
-                }
-                break;
-            }
+            ptr = print_str(ptr, end, va_arg(arg, char *), flag, width);
             break;
         case 'd': /* signed dec */
             flag |= SIGN;

@@ -61,6 +61,7 @@ static char *print_str(char *buf, char *end, char *str, int flag, int width)
     }
 
     /* string character */
+#if 0
     while (i--) {
         if (ptr < end) {
             *(ptr++) = str[i];
@@ -68,6 +69,11 @@ static char *print_str(char *buf, char *end, char *str, int flag, int width)
         }
         break;
     }
+#else
+    while ((i--) && (ptr < end)) {
+        *(ptr++) = str[i];
+    }
+#endif
 
     /* space character */
     ptr = put_char(ptr, end, ' ', &width);
@@ -115,6 +121,7 @@ static char *print_num(char *buf, char *end, int val, unsigned int base, int fla
     }
 
     /* number character */
+#if 0
     while (i--) {
         if (ptr < end) {
             *(ptr++) = tmp[i];
@@ -122,6 +129,11 @@ static char *print_num(char *buf, char *end, int val, unsigned int base, int fla
         }
         break;
     }
+#else
+    while ((i--) && (ptr < end)) {
+        *(ptr++) = tmp[i];
+    }
+#endif
 
     /* space character */
     ptr = put_char(ptr, end, ' ', &width);
